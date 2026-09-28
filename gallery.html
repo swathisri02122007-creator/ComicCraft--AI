@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Gallery — ComicCraft{% endblock %}
+
+{% block content %}
+<header class="hero">
+  <h1>Comic Gallery</h1>
+  <p>Every comic created on this computer.</p>
+</header>
+
+<main>
+  {% if comics %}
+  <ul class="gallery-list">
+    {% for comic in comics %}
+    <li>
+      <div>
+        <div class="title">{{ comic.title }}</div>
+        <div class="date">{{ comic.created }}</div>
+      </div>
+      <a class="btn" href="{{ comic.url }}" target="_blank" rel="noopener">Open PDF</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card center">
+    <div class="big-icon">📚</div>
+    <p>No comics yet — go make your first one!</p>
+    <a class="btn" href="/">Create a Comic</a>
+  </div>
+  {% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Comic Exported — ComicCraft{% endblock %}
+
+{% block content %}
+<main>
+  <div class="card center">
+    <div class="big-icon">✅</div>
+    <h1 style="font-size: 40px; text-shadow: 2px 2px 0 var(--green);">Comic Exported!</h1>
+    <p style="line-height: 1.6; color: var(--ink-soft);">
+      Your AI-powered comic has been created and downloaded. Dive back in and bring another story to life.
+    </p>
+    {% if pdf_path %}
+    <p><a href="{{ pdf_path }}" target="_blank" rel="noopener">Download didn't start? Open the PDF</a></p>
+    {% endif %}
+    <div class="actions" style="margin-top: 24px;">
+      <a class="btn" href="/">Create Another Comic</a>
+      <a class="btn secondary" href="/gallery">View Gallery</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

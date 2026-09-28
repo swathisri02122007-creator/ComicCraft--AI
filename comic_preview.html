@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ comic_title }} — ComicCraft{% endblock %}
+
+{% block content %}
+<header class="hero">
+  <span class="eyebrow">Starring {{ character_name }}</span>
+  <h1>{{ comic_title }}</h1>
+  <p>{{ layout | length }} panel{{ 's' if layout | length != 1 else '' }} generated from your idea
+    {% if image_sources %}<br><small>Artwork by {{ image_sources | join(", ") }}</small>{% endif %}</p>
+</header>
+
+<main class="wide">
+  {% if image_errors %}
+  <div class="notice">
+    <strong>Some artwork couldn't be drawn</strong>, so placeholder images were used.
+    Reason: {{ image_errors | join("; ") }}
+  </div>
+  {% endif %}
+
+  <div class="comic-grid">
+    {% for panel in layout %}
+    <article class="panel">
+      <div class="panel-title">{{ panel.panel }}. {{ panel.title }}</div>
+      <img src="{{ panel.image_url }}" alt="{{ panel.scene_description }}" loading="lazy">
+      <div class="panel-body">
+        {% if panel.narration %}<p class="narration">{{ panel.narration }}</p>{% endif %}
+        {% for d in panel.dialogue %}
+        <p class="bubble"><strong>{{ d.speaker }}:</strong> {{ d.line }}</p>
+        {% endfor %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="actions">
+    <a class="btn" id="download" href="{{ pdf_path }}" download>Download PDF</a>
+    <a class="btn secondary" href="/">Create Another</a>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // After the download starts, show the success page
+  document.getElementById("download").addEventListener("click", () => {
+    setTimeout(() => { window.location.href = "/export-success?pdf_path=" + encodeURIComponent({{ pdf_path | tojson }}); }, 800);
+  });
+</script>
+{% endblock %}

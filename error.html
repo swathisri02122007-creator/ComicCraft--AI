@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Oops — ComicCraft{% endblock %}
+
+{% block content %}
+<main>
+  <div class="card center">
+    <div class="big-icon">💥</div>
+    <h1 style="font-size: 44px;">Oops!</h1>
+    <p style="line-height: 1.6; color: var(--ink-soft);">{{ message }}</p>
+    <div class="actions" style="margin-top: 24px;">
+      <a class="btn" href="/" onclick="if (history.length > 1) { history.back(); return false; }">Try Again</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

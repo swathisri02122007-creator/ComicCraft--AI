@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}ComicCraft — Turn your idea into a comic{% endblock %}
+
+{% block content %}
+<header class="hero">
+  <span class="eyebrow">AI Comic Story Creator</span>
+  <h1>Create Your Comic</h1>
+  <p>Describe a story idea. ComicCraft writes the panels, draws the art, and hands you a finished comic as a PDF.</p>
+</header>
+
+<main>
+  {% if missing_keys %}
+  <div class="notice error">
+    <strong>Setup needed:</strong> add {{ missing_keys | join(" and ") }} to the <code>.env</code> file,
+    then restart the app. See <code>README.md</code> for how to get free keys.
+  </div>
+  {% endif %}
+
+  <form class="card" id="comic-form" action="/generate" method="post">
+    <div class="field">
+      <label for="prompt">Story prompt <span class="hint">— what happens?</span></label>
+      <textarea id="prompt" name="prompt" minlength="3" maxlength="1000" placeholder="A brave fox explores an enchanted forest to find a lost star..." required></textarea>
+      <div class="char-count"><span id="count">0</span> / 1000</div>
+      <div class="ideas" aria-label="Story ideas">
+        <button type="button" data-idea="A shy robot enters a baking competition and discovers its secret talent.">🤖 Baking robot</button>
+        <button type="button" data-idea="Two best friends find a map to a hidden treasure under their school.">🗺️ School treasure</button>
+        <button type="button" data-idea="A young astronaut gets lost on a planet made of candy and must find the way home.">🚀 Candy planet</button>
+        <button type="button" data-idea="A tiny dragon who is afraid of fire must save the village from a storm.">🐉 Tiny dragon</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="character_name">Main character name</label>
+      <input type="text" id="character_name" name="character_name" maxlength="60" placeholder="Finn" required>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="setting">Setting</label>
+        <select id="setting" name="setting">
+          {% for s in settings %}<option value="{{ s }}">{{ s | capitalize }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="tone">Story tone</label>
+        <select id="tone" name="tone">
+          {% for t in tones %}<option value="{{ t }}">{{ t | capitalize }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="style">Art style</label>
+        <select id="style" name="style">
+          {% for s in styles %}<option value="{{ s }}">{{ s | capitalize }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn block">Generate Comic</button>
+  </form>
+</main>
+
+<div class="overlay" id="overlay" role="status" aria-live="polite">
+  <div class="card">
+    <div class="spinner"></div>
+    <h2>Creating your comic…</h2>
+    <p id="step">Planning the story panels</p>
+    <small>This usually takes 1–2 minutes. Please keep this tab open.</small>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const form = document.getElementById("comic-form");
+  const prompt = document.getElementById("prompt");
+  const count = document.getElementById("count");
+
+  const updateCount = () => { count.textContent = prompt.value.length; };
+  prompt.addEventListener("input", updateCount);
+
+  document.querySelectorAll("[data-idea]").forEach((btn) => {
+    btn.addEventListener("click", () => { prompt.value = btn.dataset.idea; updateCount(); prompt.focus(); });
+  });
+
+  const steps = [
+    "Planning the story panels",
+    "Writing narration and dialogue",
+    "Drawing the panel artwork",
+    "Adding the finishing touches",
+    "Putting your PDF together",
+  ];
+
+  form.addEventListener("submit", () => {
+    document.getElementById("overlay").classList.add("show");
+    const stepEl = document.getElementById("step");
+    let i = 0;
+    setInterval(() => { if (i < steps.length - 1) stepEl.textContent = steps[++i]; }, 15000);
+  });
+
+  // If the user comes back with the browser's Back button, hide the overlay again
+  window.addEventListener("pageshow", () => document.getElementById("overlay").classList.remove("show"));
+</script>
+{% endblock %}
