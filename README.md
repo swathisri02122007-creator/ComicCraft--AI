@@ -1,13 +1,14 @@
 SHRI KRISHNASWAMY COLLEGE FOR WOMENS 
-#COLLEGE CODE : UNM1659
+
+COLLEGE CODE : UNM1659
 
 # ComicCraft--AI
 
 ComicCraft is a web-based comic creation app that lets users create custom comic stories with characters, dialogues, panels, and AI-power content using an API key.
 
-#TEAM ID : SWTID-2026-2773
+TEAM ID : SWTID-2026-2773
 
-#TEAM MEMBERS
+TEAM MEMBERS
 
 Swathy S(Team lead) NM ID:2553C93FE3DFB8C97E3433EA0E740548
 
